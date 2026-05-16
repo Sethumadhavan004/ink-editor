@@ -5,7 +5,6 @@
   "license": "MIT",
   "author": "Sethumadhavan",
   "workspaces": [
-    ".",
     "demo"
   ],
   "main": "./dist/index.js",
