@@ -1,0 +1,45 @@
+{
+  "name": "ink-editor",
+  "version": "0.0.1",
+  "description": "A page-aware rich text editor for React document apps",
+  "license": "MIT",
+  "author": "Sethumadhavan",
+  "workspaces": [
+    ".",
+    "demo"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18",
+    "@tiptap/react": ">=2",
+    "@tiptap/pm": ">=2",
+    "@tiptap/starter-kit": ">=2"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "tsup": "^8.0.0",
+    "@tiptap/react": "^2.11.0",
+    "@tiptap/pm": "^2.11.0",
+    "@tiptap/starter-kit": "^2.11.0",
+    "@types/react": "^18.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  }
+}
