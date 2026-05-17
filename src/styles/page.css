@@ -7,18 +7,13 @@
   min-height: 100vh;
 }
 
-.ink-pages-stack {
-  position: relative;
-}
-
 .ink-page-card {
   background: #fff;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
   box-sizing: border-box;
-  pointer-events: none;
 }
 
-.ink-page-card .ProseMirror,
-.ink-pages-stack .ProseMirror {
+.ink-page-card .ProseMirror {
   outline: none;
+  min-height: 100%;
 }
