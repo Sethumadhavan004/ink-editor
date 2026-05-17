@@ -9,6 +9,7 @@ export interface InkEditorProps {
 export function InkEditor({ onChange }: InkEditorProps) {
   const editor = useEditor({
     extensions: [StarterKit],
+
     onUpdate({ editor }) {
       onChange?.(editor.getJSON())
     },
@@ -21,7 +22,7 @@ export function InkEditor({ onChange }: InkEditorProps) {
   }, [editor])
 
   return (
-    <div className="ink-editor">
+    <div className="ink-editor" style={{ border: '1px solid #ccc', minHeight: '200px', padding: '8px' }}>
       <EditorContent editor={editor} />
     </div>
   )
