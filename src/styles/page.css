@@ -85,3 +85,16 @@
   user-select: none;
   -webkit-user-select: none;
 }
+
+/* Ruled lines — toggled by ink-ruled class on .ink-page-card */
+.ink-page-card.ink-ruled .ProseMirror {
+  --line-height: 1.6em;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent calc(var(--line-height) - 1px),
+    var(--ink-border-line, #c8c4b8) calc(var(--line-height) - 1px),
+    var(--ink-border-line, #c8c4b8) var(--line-height)
+  );
+  background-size: 100% var(--line-height);
+}

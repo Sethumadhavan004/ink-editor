@@ -45,3 +45,4 @@ export type ToolbarKey =
   | 'align'
   | 'list'
   | 'indent'
+  | 'lines'
