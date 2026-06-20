@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { Editor } from '@tiptap/react'
 import {
   Bold, Italic, Underline,
@@ -15,7 +16,7 @@ interface ToolbarProps {
 
 interface ButtonConfig {
   label: string
-  icon: React.ReactNode
+  icon: ReactNode
   isActive: () => boolean
   action: () => void
 }

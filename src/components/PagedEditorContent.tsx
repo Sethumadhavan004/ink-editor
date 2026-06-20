@@ -6,8 +6,6 @@ import type { PageSize, Theme, ToolbarKey } from '../types'
 import { Toolbar } from './Toolbar'
 import '../styles/page.css'
 
-const DEFAULT_TOOLBAR: ToolbarKey[] = ['bold', 'italic', 'underline', 'h1', 'h2', 'align', 'list', 'indent']
-
 interface Props {
   editor: Editor | null
   pageSize: PageSize
@@ -67,6 +65,9 @@ export function PagedEditorContent({ editor, pageSize, theme, toolbar }: Props) 
           backgroundImage: pageBreakBackground,
           backgroundSize: `100% ${pageHeightPx}px`,
           backgroundRepeat: 'repeat-y',
+          ['--ink-padding-top' as string]: `${dims.paddingTopMm}mm`,
+          ['--ink-padding-right' as string]: `${dims.paddingRightMm}mm`,
+          ['--ink-padding-left' as string]: `${dims.paddingLeftMm}mm`,
         }}
       >
         {editor && toolbar.length > 0 && (
