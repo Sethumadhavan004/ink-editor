@@ -33,3 +33,15 @@ export function getPageWidthPx(size: PageSize): number {
   const d = PAGE_DIMENSIONS[size]
   return Math.round(d.widthMm * PX_PER_MM)
 }
+
+export type Theme = 'parchment' | 'minimal'
+
+export type ToolbarKey =
+  | 'bold'
+  | 'italic'
+  | 'underline'
+  | 'h1'
+  | 'h2'
+  | 'align'
+  | 'list'
+  | 'indent'
