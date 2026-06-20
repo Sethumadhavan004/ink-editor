@@ -70,3 +70,17 @@
 .ink-toolbar-btn--active {
   color: var(--ink-accent);
 }
+
+/* Page gap widget — injected by ProseMirror plugin at each page boundary */
+.ink-page-gap {
+  display: block;
+  width: calc(100% + var(--ink-padding-left, 28mm) + var(--ink-padding-right, 28mm));
+  margin-left: calc(-1 * var(--ink-padding-left, 28mm));
+  background: var(--ink-bg);
+  border-top: 1px solid var(--ink-border-line);
+  border-bottom: 1px solid var(--ink-border-line);
+  box-sizing: border-box;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
