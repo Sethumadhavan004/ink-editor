@@ -2,17 +2,15 @@
 
 .ink-page-wrap {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 32px 0;
-  background: var(--ink-bg);
   min-height: 100vh;
+  background: var(--ink-bg);
 }
 
 .ink-page-card {
   background: var(--ink-page);
   box-shadow: var(--ink-shadow);
-  box-sizing: border-box;
   font-family: var(--ink-font-body);
   color: var(--ink-text);
 }
@@ -74,28 +72,12 @@
   color: var(--ink-accent);
 }
 
-/* Page gap widget — injected by ProseMirror plugin at each page boundary */
-.ink-page-gap {
-  display: block;
-  width: calc(100% + var(--ink-padding-left, 28mm) + var(--ink-padding-right, 28mm));
-  margin-left: calc(-1 * var(--ink-padding-left, 28mm));
-  margin-top: 14px;
-  background: var(--ink-bg);
-  border-top: 2px solid var(--ink-border-line);
-  border-bottom: 2px solid var(--ink-border-line);
-  box-sizing: border-box;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
 /* Lock paragraph line-height — zero margins so ruled lines stay on grid */
 .ink-page-card .ProseMirror p {
   line-height: 28px;
   margin: 0;
   padding: 0;
 }
-
 
 /* Ruled lines — toggled by ink-ruled class on .ink-page-card */
 .ink-page-card.ink-ruled .ProseMirror {
