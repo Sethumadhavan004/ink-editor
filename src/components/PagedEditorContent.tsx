@@ -38,16 +38,17 @@ export function PagedEditorContent({ editor, pageSize }: Props) {
     }
   }, [editor, bodyHeightPx])
 
-  // Draw a horizontal rule at each page boundary using repeating-linear-gradient.
-  // The rule appears at multiples of bodyHeightPx within the padded content area.
-  // We use the body height (not full page height) as repeat interval since padding
-  // is part of the card and text flows through it continuously.
+  const paddingTopPx = Math.round(dims.paddingTopMm * 3.7795)
+  const firstLinePx = paddingTopPx + bodyHeightPx
+
   const pageBreakBackground = `repeating-linear-gradient(
     to bottom,
     transparent 0px,
-    transparent ${bodyHeightPx - 1}px,
-    #d0d0d0 ${bodyHeightPx - 1}px,
-    #d0d0d0 ${bodyHeightPx}px
+    transparent ${firstLinePx - 1}px,
+    var(--ink-border-line, #d0d0d0) ${firstLinePx - 1}px,
+    var(--ink-border-line, #d0d0d0) ${firstLinePx}px,
+    transparent ${firstLinePx}px,
+    transparent ${pageHeightPx}px
   )`
 
   return (
@@ -60,9 +61,8 @@ export function PagedEditorContent({ editor, pageSize }: Props) {
           minHeight: pageHeightPx,
           padding: paddingCss,
           backgroundImage: pageBreakBackground,
-          backgroundSize: `100% ${bodyHeightPx}px`,
+          backgroundSize: `100% ${pageHeightPx}px`,
           backgroundRepeat: 'repeat-y',
-          backgroundPositionY: `${Math.round(dims.paddingTopMm * 3.7795)}px`,
         }}
       >
         <EditorContent editor={editor} />
