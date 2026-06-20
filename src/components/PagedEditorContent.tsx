@@ -5,8 +5,6 @@ import type { PageSize, Theme, ToolbarKey } from '../types'
 import { Toolbar } from './Toolbar'
 import '../styles/page.css'
 
-const PROSEMIRROR_PADDING_PX = 28
-
 interface Props {
   editor: Editor | null
   pageSize: PageSize
@@ -23,7 +21,7 @@ export function PagedEditorContent({ editor, pageSize, theme, toolbar, ruled, on
   const pageHeightPx = Math.round(dims.heightMm * 3.7795)
   const paddingCss = `${dims.paddingTopMm}mm ${dims.paddingRightMm}mm ${dims.paddingBottomMm}mm ${dims.paddingLeftMm}mm`
   const hasToolbar = toolbar.length > 0
-  const bodyHeightPx = getBodyHeightPx(pageSize) - PROSEMIRROR_PADDING_PX * 2
+  const bodyHeightPx = getBodyHeightPx(pageSize)
 
   return (
     <div className="ink-page-wrap" data-theme={theme}>
