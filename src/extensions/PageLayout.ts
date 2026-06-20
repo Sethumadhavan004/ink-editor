@@ -3,6 +3,7 @@ import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet, EditorView } from '@tiptap/pm/view'
 import { Node as ProseMirrorNode } from '@tiptap/pm/model'
 import type { PageSize } from '../types'
+import { PAGE_DIMENSIONS } from '../types'
 
 const META_KEY = 'pageBreakDecos'
 const pluginKey = new PluginKey<DecorationSet>('pageBreak')
@@ -12,7 +13,6 @@ function makeGapWidget(gapHeightPx: number, pageIndex: number): HTMLElement {
   el.className = 'ink-page-gap'
   el.setAttribute('data-page-gap', String(pageIndex))
   el.style.height = `${gapHeightPx}px`
-  el.style.marginBottom = '28px'
   el.contentEditable = 'false'
   return el
 }
@@ -34,18 +34,25 @@ function computeDecorations(
     if (insidePos >= doc.content.size) return
 
     let top: number
+    let bottom: number
     try {
       top = view.coordsAtPos(insidePos).top
+      // coordsAtPos at end of node gives the bottom of the last line
+      const endPos = pos + node.nodeSize - 1
+      bottom = endPos > insidePos ? view.coordsAtPos(endPos).bottom : top + 28
     } catch {
       return
     }
 
     if (baseY === null) baseY = top
 
-    const relY = top - baseY
     const threshold = pageIndex * bodyHeightPx + (pageIndex - 1) * gapHeightPx
 
-    if (relY >= threshold) {
+    // Fire on top of this node OR when the previous node's bottom crossed the threshold
+    const relTop = top - baseY
+    const relBottom = bottom - baseY
+
+    if (relTop >= threshold || (relBottom > threshold && relTop < threshold)) {
       const idx = pageIndex
       decorations.push(
         Decoration.widget(pos, () => makeGapWidget(gapHeightPx, idx), {
@@ -60,24 +67,32 @@ function computeDecorations(
   return DecorationSet.create(doc, decorations)
 }
 
-function measurePageDimensions(view: EditorView): { bodyHeightPx: number; gapHeightPx: number } | null {
-  // Walk up from ProseMirror DOM to find the .ink-page-card and measure it live
+function measurePageDimensions(view: EditorView, pageSize: PageSize): { bodyHeightPx: number; gapHeightPx: number } | null {
   const card = (view.dom as HTMLElement).closest('.ink-page-card') as HTMLElement | null
   if (!card) return null
 
-  const cardHeight = card.clientHeight
+  // getComputedStyle converts mm→px using the real browser DPR — more accurate than 3.7795
   const style = window.getComputedStyle(card)
   const paddingTop = parseFloat(style.paddingTop)
   const paddingBottom = parseFloat(style.paddingBottom)
-
-  // Account for toolbar height inside the card
-  const toolbar = card.querySelector('.ink-toolbar') as HTMLElement | null
-  const toolbarHeight = toolbar ? toolbar.offsetHeight : 0
-
-  const bodyHeightPx = Math.round(cardHeight - paddingTop - paddingBottom - toolbarHeight)
   const gapHeightPx = Math.round(paddingTop + paddingBottom)
 
-  return { bodyHeightPx, gapHeightPx }
+  // Use the page's mm ratio to derive body height from the measured gap
+  const dims = PAGE_DIMENSIONS[pageSize]
+  const bodyMm = dims.heightMm - dims.paddingTopMm - dims.paddingBottomMm
+  const gapMm = dims.paddingTopMm + dims.paddingBottomMm
+
+  const pmPaddingTop = parseFloat(window.getComputedStyle(view.dom as HTMLElement).paddingTop) || 28
+  // Widget height: raw gap minus pmPaddingTop (follows each gap naturally), snapped to 28-grid
+  // No margin-top on the widget CSS, so no extra offset to account for
+  const rawWidgetHeight = gapHeightPx - pmPaddingTop
+  const widgetHeightPx = Math.round(rawWidgetHeight / 28) * 28
+  // No toolbar subtraction needed — coordsAtPos sets baseY from the first line,
+  // so relY is already relative to content start, not the card top.
+  const rawBodyHeight = Math.round((bodyMm / gapMm) * gapHeightPx)
+  const bodyHeightPx = Math.floor(rawBodyHeight / 28) * 28
+
+  return { bodyHeightPx, gapHeightPx: widgetHeightPx }
 }
 
 export function buildPageBreakPlugin(pageSize: PageSize): Plugin<DecorationSet> {
@@ -88,7 +103,7 @@ export function buildPageBreakPlugin(pageSize: PageSize): Plugin<DecorationSet> 
     rafId = requestAnimationFrame(() => {
       rafId = null
       if (view.isDestroyed) return
-      const dims = measurePageDimensions(view)
+      const dims = measurePageDimensions(view, pageSize)
       if (!dims) return
       const { bodyHeightPx, gapHeightPx } = dims
       const decos = computeDecorations(view.state.doc, view, bodyHeightPx, gapHeightPx)
