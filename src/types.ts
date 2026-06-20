@@ -29,6 +29,11 @@ export function getBodyHeightPx(size: PageSize): number {
   return Math.round((d.heightMm - d.paddingTopMm - d.paddingBottomMm) * PX_PER_MM)
 }
 
+export function getBodyWidthPx(size: PageSize): number {
+  const d = PAGE_DIMENSIONS[size]
+  return Math.round((d.widthMm - d.paddingLeftMm - d.paddingRightMm) * PX_PER_MM)
+}
+
 export function getPageWidthPx(size: PageSize): number {
   const d = PAGE_DIMENSIONS[size]
   return Math.round(d.widthMm * PX_PER_MM)
