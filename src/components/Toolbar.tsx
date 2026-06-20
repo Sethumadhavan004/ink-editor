@@ -6,12 +6,15 @@ import {
   AlignLeft, AlignCenter, AlignRight, AlignJustify,
   List, ListOrdered,
   Indent, Outdent,
+  Rows,
 } from 'lucide-react'
 import type { ToolbarKey } from '../types'
 
 interface ToolbarProps {
   editor: Editor
   buttons: ToolbarKey[]
+  ruled: boolean
+  onToggleRuled: () => void
 }
 
 interface ButtonConfig {
@@ -25,7 +28,7 @@ function Sep() {
   return <span className="ink-toolbar-sep" aria-hidden="true" />
 }
 
-export function Toolbar({ editor, buttons }: ToolbarProps) {
+export function Toolbar({ editor, buttons, ruled, onToggleRuled }: ToolbarProps) {
   const iconSize = 16
 
   const allGroups: { key: ToolbarKey; configs: ButtonConfig[] }[] = [
@@ -136,6 +139,15 @@ export function Toolbar({ editor, buttons }: ToolbarProps) {
           action: () => editor.chain().focus().liftListItem('listItem').run(),
         },
       ],
+    },
+    {
+      key: 'lines',
+      configs: [{
+        label: 'Toggle ruled lines',
+        icon: <Rows size={iconSize} />,
+        isActive: () => ruled,
+        action: onToggleRuled,
+      }],
     },
   ]
 

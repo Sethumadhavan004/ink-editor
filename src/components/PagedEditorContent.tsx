@@ -10,9 +10,11 @@ interface Props {
   pageSize: PageSize
   theme: Theme
   toolbar: ToolbarKey[]
+  ruled: boolean
+  onToggleRuled: () => void
 }
 
-export function PagedEditorContent({ editor, pageSize, theme, toolbar }: Props) {
+export function PagedEditorContent({ editor, pageSize, theme, toolbar, ruled, onToggleRuled }: Props) {
   const widthPx = getPageWidthPx(pageSize)
   const dims = PAGE_DIMENSIONS[pageSize]
   const pageHeightPx = Math.round(dims.heightMm * 3.7795)
@@ -21,7 +23,7 @@ export function PagedEditorContent({ editor, pageSize, theme, toolbar }: Props) 
   return (
     <div className="ink-page-wrap" data-theme={theme}>
       <div
-        className="ink-page-card"
+        className={`ink-page-card${ruled ? ' ink-ruled' : ''}`}
         style={{
           width: widthPx,
           minHeight: pageHeightPx,
@@ -32,7 +34,12 @@ export function PagedEditorContent({ editor, pageSize, theme, toolbar }: Props) 
         }}
       >
         {editor && toolbar.length > 0 && (
-          <Toolbar editor={editor} buttons={toolbar} />
+          <Toolbar
+            editor={editor}
+            buttons={toolbar}
+            ruled={ruled}
+            onToggleRuled={onToggleRuled}
+          />
         )}
         <EditorContent editor={editor} />
       </div>

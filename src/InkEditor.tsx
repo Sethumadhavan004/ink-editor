@@ -2,12 +2,13 @@ import { useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { PageLayout } from './extensions/PageLayout'
+import { TabIndent } from './extensions/TabIndent'
 import { PagedEditorContent } from './components/PagedEditorContent'
 import type { PageSize, Theme, ToolbarKey } from './types'
 
-const DEFAULT_TOOLBAR: ToolbarKey[] = ['bold', 'italic', 'underline', 'h1', 'h2', 'align', 'list', 'indent']
+const DEFAULT_TOOLBAR: ToolbarKey[] = ['bold', 'italic', 'underline', 'h1', 'h2', 'align', 'list', 'indent', 'lines']
 
 export interface InkEditorProps {
   pageSize?: PageSize
@@ -22,12 +23,15 @@ export function InkEditor({
   theme = 'parchment',
   toolbar = DEFAULT_TOOLBAR,
 }: InkEditorProps) {
+  const [ruled, setRuled] = useState(false)
+
   const editor = useEditor({
     extensions: [
       StarterKit,
       PageLayout.configure({ pageSize }),
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Underline,
+      TabIndent,
     ],
     onUpdate({ editor }) {
       onChange?.(editor.getJSON())
@@ -46,6 +50,8 @@ export function InkEditor({
       pageSize={pageSize}
       theme={theme}
       toolbar={toolbar}
+      ruled={ruled}
+      onToggleRuled={() => setRuled((r) => !r)}
     />
   )
 }
