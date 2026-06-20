@@ -80,7 +80,6 @@
   width: calc(100% + var(--ink-padding-left, 28mm) + var(--ink-padding-right, 28mm));
   margin-left: calc(-1 * var(--ink-padding-left, 28mm));
   margin-top: 14px;
-  margin-bottom: 28px;
   background: var(--ink-bg);
   border-top: 2px solid var(--ink-border-line);
   border-bottom: 2px solid var(--ink-border-line);

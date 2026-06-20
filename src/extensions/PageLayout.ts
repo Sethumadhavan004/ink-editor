@@ -13,6 +13,7 @@ function makeGapWidget(gapHeightPx: number, pageIndex: number): HTMLElement {
   el.className = 'ink-page-gap'
   el.setAttribute('data-page-gap', String(pageIndex))
   el.style.height = `${gapHeightPx}px`
+  el.style.marginBottom = '28px'
   el.contentEditable = 'false'
   return el
 }
