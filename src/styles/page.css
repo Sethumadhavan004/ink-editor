@@ -107,5 +107,7 @@
     var(--ink-border-line, #c8c4b8) 28px
   );
   background-size: 100% 28px;
+  background-origin: content-box;
+  background-clip: content-box;
   background-attachment: local;
 }
