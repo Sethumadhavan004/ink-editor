@@ -2,7 +2,6 @@ import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet, EditorView } from '@tiptap/pm/view'
 import { Node as ProseMirrorNode } from '@tiptap/pm/model'
-import { PAGE_DIMENSIONS, getBodyHeightPx } from '../types'
 import type { PageSize } from '../types'
 
 const META_KEY = 'pageBreakDecos'
@@ -61,14 +60,27 @@ function computeDecorations(
   return DecorationSet.create(doc, decorations)
 }
 
-export function buildPageBreakPlugin(pageSize: PageSize): Plugin<DecorationSet> {
-  const dims = PAGE_DIMENSIONS[pageSize]
-  const PX_PER_MM = 3.7795
-  const bodyHeightPx = getBodyHeightPx(pageSize)
-  const paddingTopPx = Math.round(dims.paddingTopMm * PX_PER_MM)
-  const paddingBottomPx = Math.round(dims.paddingBottomMm * PX_PER_MM)
-  const gapHeightPx = paddingBottomPx + paddingTopPx
+function measurePageDimensions(view: EditorView): { bodyHeightPx: number; gapHeightPx: number } | null {
+  // Walk up from ProseMirror DOM to find the .ink-page-card and measure it live
+  const card = (view.dom as HTMLElement).closest('.ink-page-card') as HTMLElement | null
+  if (!card) return null
 
+  const cardHeight = card.clientHeight
+  const style = window.getComputedStyle(card)
+  const paddingTop = parseFloat(style.paddingTop)
+  const paddingBottom = parseFloat(style.paddingBottom)
+
+  // Account for toolbar height inside the card
+  const toolbar = card.querySelector('.ink-toolbar') as HTMLElement | null
+  const toolbarHeight = toolbar ? toolbar.offsetHeight : 0
+
+  const bodyHeightPx = Math.round(cardHeight - paddingTop - paddingBottom - toolbarHeight)
+  const gapHeightPx = Math.round(paddingTop + paddingBottom)
+
+  return { bodyHeightPx, gapHeightPx }
+}
+
+export function buildPageBreakPlugin(pageSize: PageSize): Plugin<DecorationSet> {
   let rafId: ReturnType<typeof requestAnimationFrame> | null = null
 
   function scheduleUpdate(view: EditorView) {
@@ -76,6 +88,9 @@ export function buildPageBreakPlugin(pageSize: PageSize): Plugin<DecorationSet> 
     rafId = requestAnimationFrame(() => {
       rafId = null
       if (view.isDestroyed) return
+      const dims = measurePageDimensions(view)
+      if (!dims) return
+      const { bodyHeightPx, gapHeightPx } = dims
       const decos = computeDecorations(view.state.doc, view, bodyHeightPx, gapHeightPx)
       const tr = view.state.tr.setMeta(META_KEY, decos)
       // Mark as not adding to history
