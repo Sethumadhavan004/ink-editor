@@ -2,20 +2,27 @@ import { useEffect, useRef, useState } from 'react'
 import { EditorContent } from '@tiptap/react'
 import type { Editor } from '@tiptap/react'
 import { getBodyHeightPx, getPageWidthPx, PAGE_DIMENSIONS } from '../types'
-import type { PageSize } from '../types'
+import type { PageSize, Theme, ToolbarKey } from '../types'
+import { Toolbar } from './Toolbar'
 import '../styles/page.css'
+
+const DEFAULT_TOOLBAR: ToolbarKey[] = ['bold', 'italic', 'underline', 'h1', 'h2', 'align', 'list', 'indent']
 
 interface Props {
   editor: Editor | null
   pageSize: PageSize
+  theme: Theme
+  toolbar: ToolbarKey[]
 }
 
-export function PagedEditorContent({ editor, pageSize }: Props) {
+export function PagedEditorContent({ editor, pageSize, theme, toolbar }: Props) {
   const bodyHeightPx = getBodyHeightPx(pageSize)
   const widthPx = getPageWidthPx(pageSize)
   const dims = PAGE_DIMENSIONS[pageSize]
   const pageHeightPx = Math.round(dims.heightMm * 3.7795)
+  const paddingTopPx = Math.round(dims.paddingTopMm * 3.7795)
   const paddingCss = `${dims.paddingTopMm}mm ${dims.paddingRightMm}mm ${dims.paddingBottomMm}mm ${dims.paddingLeftMm}mm`
+  const firstLinePx = paddingTopPx + bodyHeightPx
 
   const [pageCount, setPageCount] = useState(1)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -38,9 +45,6 @@ export function PagedEditorContent({ editor, pageSize }: Props) {
     }
   }, [editor, bodyHeightPx])
 
-  const paddingTopPx = Math.round(dims.paddingTopMm * 3.7795)
-  const firstLinePx = paddingTopPx + bodyHeightPx
-
   const pageBreakBackground = `repeating-linear-gradient(
     to bottom,
     transparent 0px,
@@ -52,7 +56,7 @@ export function PagedEditorContent({ editor, pageSize }: Props) {
   )`
 
   return (
-    <div className="ink-page-wrap">
+    <div className="ink-page-wrap" data-theme={theme}>
       <div
         ref={contentRef}
         className="ink-page-card"
@@ -65,6 +69,9 @@ export function PagedEditorContent({ editor, pageSize }: Props) {
           backgroundRepeat: 'repeat-y',
         }}
       >
+        {editor && toolbar.length > 0 && (
+          <Toolbar editor={editor} buttons={toolbar} />
+        )}
         <EditorContent editor={editor} />
       </div>
     </div>
