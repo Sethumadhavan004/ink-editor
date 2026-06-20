@@ -10,7 +10,7 @@ export function InkEditorClient() {
     <InkEditor
       pageSize="A4"
       theme="parchment"
-      toolbar={['bold', 'italic', 'underline', 'h1', 'h2', 'align', 'list', 'indent']}
+      toolbar={['bold', 'italic', 'underline', 'h1', 'h2', 'align', 'list', 'indent', 'lines']}
       onChange={(json: object) => console.log(json)}
     />
   )
