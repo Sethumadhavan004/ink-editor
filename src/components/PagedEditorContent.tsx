@@ -21,7 +21,6 @@ export function PagedEditorContent({ editor, pageSize, theme, toolbar }: Props) 
   return (
     <div className="ink-page-wrap" data-theme={theme}>
       <div
-        ref={contentRef}
         className="ink-page-card"
         style={{
           width: widthPx,
