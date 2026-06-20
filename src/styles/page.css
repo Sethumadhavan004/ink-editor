@@ -87,15 +87,22 @@
   -webkit-user-select: none;
 }
 
+/* Lock paragraph line-height and remove default margins so lines align */
+.ink-page-card .ProseMirror p {
+  line-height: 28px;
+  margin: 0;
+  padding: 0;
+}
+
 /* Ruled lines — toggled by ink-ruled class on .ink-page-card */
 .ink-page-card.ink-ruled .ProseMirror {
   background-image: repeating-linear-gradient(
     to bottom,
     transparent 0px,
-    transparent 26px,
-    var(--ink-border-line, #c8c4b8) 26px,
-    var(--ink-border-line, #c8c4b8) 27px
+    transparent 27px,
+    var(--ink-border-line, #c8c4b8) 27px,
+    var(--ink-border-line, #c8c4b8) 28px
   );
-  background-size: 100% 27px;
+  background-size: 100% 28px;
   background-attachment: local;
 }
