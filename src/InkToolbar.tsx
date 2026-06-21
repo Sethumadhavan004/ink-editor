@@ -2,6 +2,7 @@ import { type ReactNode, type CSSProperties } from 'react'
 import { useInkEditor } from './context'
 import { FloatingToolbar } from './components/FloatingToolbar'
 import type { ToolbarKey, ThemeColors } from './types'
+import { FONTS } from './components/FontPicker'
 
 const DEFAULT_TOOLBAR: ToolbarKey[] = [
   'bold', 'italic', 'underline', 'h1', 'h2', 'align', 'list', 'indent', 'lines',
@@ -28,8 +29,19 @@ export function InkToolbar({
 
   if (!editor) return null
 
+  const cssVars = {
+    '--ink-page': colors.paperColor,
+    '--ink-bg': colors.canvasBg,
+    '--ink-text': colors.textColor,
+    '--ink-border-line': colors.lineColor,
+    '--ink-accent': colors.accentColor,
+    '--ink-text-muted': colors.textColor + '99',
+    '--ink-toolbar-border': colors.lineColor,
+    '--ink-font-body': FONTS[font].family,
+  } as CSSProperties
+
   return (
-    <div className={className} style={style}>
+    <div className={className} style={{ ...cssVars, ...style }}>
       <FloatingToolbar
         editor={editor}
         buttons={buttons}

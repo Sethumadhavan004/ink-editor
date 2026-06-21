@@ -32,7 +32,7 @@ export function InkPage({ pageSize = 'A4', theme = 'parchment', className, style
   } as CSSProperties
 
   return (
-    <div data-theme={theme} style={cssVars}>
+    <div className="ink-page-wrap" data-theme={theme} style={cssVars}>
       <div
         className={`ink-page-card${ruled ? ' ink-ruled' : ''}${className ? ` ${className}` : ''}`}
         style={{
