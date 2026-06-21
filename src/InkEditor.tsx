@@ -16,6 +16,8 @@ export interface InkEditorProps {
   onChange?: (json: object) => void
   theme?: Theme
   toolbar?: ToolbarKey[]
+  initialFont?: FontKey
+  initialColors?: Partial<ThemeColors>
 }
 
 export function InkEditor({
@@ -23,12 +25,15 @@ export function InkEditor({
   onChange,
   theme = 'parchment',
   toolbar = DEFAULT_TOOLBAR,
+  initialFont = 'cursive',
+  initialColors,
 }: InkEditorProps) {
   const [ruled, setRuled] = useState(false)
-  const [font, setFont] = useState<FontKey>('cursive')
-  const [colors, setColors] = useState<ThemeColors>(
-    theme === 'minimal' ? MINIMAL_DEFAULTS : PARCHMENT_DEFAULTS
-  )
+  const [font, setFont] = useState<FontKey>(initialFont)
+  const [colors, setColors] = useState<ThemeColors>({
+    ...(theme === 'minimal' ? MINIMAL_DEFAULTS : PARCHMENT_DEFAULTS),
+    ...initialColors,
+  })
 
   const editor = useEditor({
     extensions: [
