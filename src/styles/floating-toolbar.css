@@ -1,0 +1,175 @@
+/* Sticky wrapper — keeps toolbar floating in canvas while page scrolls beneath */
+.ink-floating-toolbar-wrap {
+  position: sticky;
+  top: 16px;
+  z-index: 100;
+  width: fit-content;
+  margin-bottom: 16px;
+  align-self: center;
+}
+
+/* Pill-shaped floating bar */
+.ink-floating-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 12px;
+  background: var(--ink-page, #f5f4ed);
+  border: 1px solid var(--ink-toolbar-border, #d4d0c4);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  white-space: nowrap;
+}
+
+.ink-toolbar-sep {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background: var(--ink-toolbar-border, #d4d0c4);
+  margin: 0 6px;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.ink-toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  color: var(--ink-text-muted, #6b6a64);
+  transition: background 0.1s, color 0.1s;
+  flex-shrink: 0;
+}
+
+.ink-toolbar-btn:hover {
+  background: var(--ink-toolbar-border, #d4d0c4);
+  color: var(--ink-text, #141413);
+}
+
+.ink-toolbar-btn--active {
+  color: var(--ink-accent, #1b365d);
+}
+
+/* Popover container — parent must be position:relative */
+.ink-popover-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.ink-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink-page, #f5f4ed);
+  border: 1px solid var(--ink-toolbar-border, #d4d0c4);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  z-index: 200;
+  min-width: 160px;
+}
+
+/* Font picker list */
+.ink-font-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ink-font-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  color: var(--ink-text, #141413);
+  text-align: left;
+  width: 100%;
+  transition: background 0.1s;
+}
+
+.ink-font-option:hover {
+  background: var(--ink-toolbar-border, #d4d0c4);
+}
+
+.ink-font-option--active {
+  background: var(--ink-toolbar-border, #d4d0c4);
+  font-weight: 600;
+}
+
+/* Color panel rows */
+.ink-color-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 220px;
+}
+
+.ink-color-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ink-color-label {
+  font-size: 11px;
+  color: var(--ink-text-muted, #6b6a64);
+  width: 46px;
+  flex-shrink: 0;
+}
+
+.ink-swatches {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.ink-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.1s, border-color 0.1s;
+}
+
+.ink-swatch:hover {
+  transform: scale(1.15);
+}
+
+.ink-swatch--active {
+  border-color: var(--ink-accent, #1b365d);
+}
+
+.ink-color-custom {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--ink-toolbar-border, #d4d0c4);
+  cursor: pointer;
+  padding: 0;
+  background: none;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.ink-color-custom input[type="color"] {
+  width: 200%;
+  height: 200%;
+  margin: -50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+}
