@@ -51,3 +51,29 @@ export type ToolbarKey =
   | 'list'
   | 'indent'
   | 'lines'
+
+export type FontKey = 'cursive' | 'serif' | 'sans' | 'slab' | 'mono'
+
+export interface ThemeColors {
+  canvasBg: string
+  paperColor: string
+  textColor: string
+  lineColor: string
+  accentColor: string
+}
+
+export const PARCHMENT_DEFAULTS: ThemeColors = {
+  canvasBg: '#e0ddd4',
+  paperColor: '#f5f4ed',
+  textColor: '#141413',
+  lineColor: '#c8c4b8',
+  accentColor: '#1b365d',
+}
+
+export const MINIMAL_DEFAULTS: ThemeColors = {
+  canvasBg: '#e8e8e8',
+  paperColor: '#ffffff',
+  textColor: '#111111',
+  lineColor: '#d0d0d0',
+  accentColor: '#2563eb',
+}
