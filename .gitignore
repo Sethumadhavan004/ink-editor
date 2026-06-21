@@ -1,4 +1,6 @@
 /docs
+HANDOFF.md
+TOME.md
 node_modules
 dist
 .next
