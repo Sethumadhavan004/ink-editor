@@ -27,9 +27,10 @@ interface ColorPanelProps {
   open: boolean
   onToggle: () => void
   onClose: () => void
+  hiddenKeys?: (keyof ThemeColors)[]
 }
 
-export function ColorPanel({ colors, onChange, open, onToggle, onClose }: ColorPanelProps) {
+export function ColorPanel({ colors, onChange, open, onToggle, onClose, hiddenKeys = [] }: ColorPanelProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -58,7 +59,7 @@ export function ColorPanel({ colors, onChange, open, onToggle, onClose }: ColorP
       </button>
       {open && (
         <div className="ink-popover ink-popover--right ink-color-panel" role="dialog" aria-label="Color customization">
-          {COLOR_KEYS.map((key) => (
+          {COLOR_KEYS.filter(k => !hiddenKeys.includes(k)).map((key) => (
             <div key={key} className="ink-color-row">
               <span className="ink-color-label">{COLOR_LABELS[key]}</span>
               <div className="ink-swatches">

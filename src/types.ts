@@ -51,6 +51,7 @@ export type ToolbarKey =
   | 'list'
   | 'indent'
   | 'lines'
+  | 'addpage'
 
 export type FontKey = 'cursive' | 'serif' | 'sans' | 'slab' | 'mono'
 

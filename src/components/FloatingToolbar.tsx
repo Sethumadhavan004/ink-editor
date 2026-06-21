@@ -7,7 +7,9 @@ import {
   List, ListOrdered,
   Indent, Outdent,
   Rows,
+  FilePlus,
 } from 'lucide-react'
+import { type ReactNode } from 'react'
 import type { FontKey, ThemeColors, ToolbarKey } from '../types'
 import { FontPicker, GOOGLE_FONTS_URL } from './FontPicker'
 import { ColorPanel } from './ColorPanel'
@@ -22,6 +24,9 @@ interface FloatingToolbarProps {
   onFontChange: (f: FontKey) => void
   colors: ThemeColors
   onColorsChange: (c: ThemeColors) => void
+  toolbarStart?: ReactNode[]
+  toolbarEnd?: ReactNode[]
+  hiddenColorKeys?: (keyof ThemeColors)[]
 }
 
 type OpenPanel = 'font' | 'color' | null
@@ -39,6 +44,9 @@ export function FloatingToolbar({
   onFontChange,
   colors,
   onColorsChange,
+  toolbarStart,
+  toolbarEnd,
+  hiddenColorKeys,
 }: FloatingToolbarProps) {
   const [openPanel, setOpenPanel] = useState<OpenPanel>(null)
 
@@ -136,6 +144,17 @@ export function FloatingToolbar({
         action: onToggleRuled,
       }],
     },
+    {
+      key: 'addpage',
+      configs: [{
+        label: 'Add page', icon: <FilePlus size={iconSize} />,
+        isActive: () => false,
+        action: () => {
+          const end = editor.state.doc.content.size - 1
+          editor.chain().focus().insertContentAt(end, [{ type: 'paragraph' }, { type: 'paragraph' }]).run()
+        },
+      }],
+    },
   ]
 
   const activeGroups = allGroups.filter((g) => buttons.includes(g.key))
@@ -143,7 +162,15 @@ export function FloatingToolbar({
   return (
     <div className="ink-floating-toolbar-wrap">
       <div className="ink-floating-toolbar" role="toolbar" aria-label="Text formatting">
-        {/* Text formatting buttons */}
+        {/* Consumer slot: start */}
+        {toolbarStart && toolbarStart.length > 0 && (
+          <>
+            {toolbarStart.map((node, i) => <span key={i} style={{ display: 'contents' }}>{node}</span>)}
+            <Sep />
+          </>
+        )}
+
+        {/* Built-in formatting buttons */}
         {activeGroups.map((group, gi) => (
           <span key={group.key} className="ink-toolbar-group" style={{ display: 'contents' }}>
             {group.configs.map((cfg) => (
@@ -162,7 +189,7 @@ export function FloatingToolbar({
           </span>
         ))}
 
-        {/* Customization group */}
+        {/* Font + color pickers */}
         {activeGroups.length > 0 && <Sep />}
         <FontPicker
           font={font}
@@ -177,7 +204,16 @@ export function FloatingToolbar({
           open={openPanel === 'color'}
           onToggle={() => togglePanel('color')}
           onClose={() => setOpenPanel(null)}
+          hiddenKeys={hiddenColorKeys}
         />
+
+        {/* Consumer slot: end */}
+        {toolbarEnd && toolbarEnd.length > 0 && (
+          <>
+            <Sep />
+            {toolbarEnd.map((node, i) => <span key={i} style={{ display: 'contents' }}>{node}</span>)}
+          </>
+        )}
       </div>
     </div>
   )

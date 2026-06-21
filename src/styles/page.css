@@ -5,8 +5,14 @@
   flex-direction: column;
   align-items: center;
   padding: 32px 0;
-  background: var(--ink-bg);
+  background: transparent;
   min-height: 100vh;
+}
+
+/* Single-page mode: no min-height, no padding — consumer controls layout */
+.ink-page-wrap--single {
+  min-height: unset;
+  padding: 0;
 }
 
 .ink-page-card {
@@ -31,7 +37,7 @@
   display: block;
   width: calc(100% + var(--ink-padding-left, 28mm) + var(--ink-padding-right, 28mm));
   margin-left: calc(-1 * var(--ink-padding-left, 28mm));
-  background: var(--ink-bg);
+  background: transparent;
   border-top: 2px solid var(--ink-border-line);
   border-bottom: 2px solid var(--ink-border-line);
   box-sizing: border-box;
