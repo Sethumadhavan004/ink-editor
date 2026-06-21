@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react'
 import { PageLayout } from './extensions/PageLayout'
 import { TabIndent } from './extensions/TabIndent'
 import { PagedEditorContent } from './components/PagedEditorContent'
-import type { PageSize, Theme, ToolbarKey } from './types'
+import type { PageSize, Theme, ToolbarKey, FontKey, ThemeColors } from './types'
+import { PARCHMENT_DEFAULTS, MINIMAL_DEFAULTS } from './types'
 
 const DEFAULT_TOOLBAR: ToolbarKey[] = ['bold', 'italic', 'underline', 'h1', 'h2', 'align', 'list', 'indent', 'lines']
 
@@ -24,6 +25,10 @@ export function InkEditor({
   toolbar = DEFAULT_TOOLBAR,
 }: InkEditorProps) {
   const [ruled, setRuled] = useState(false)
+  const [font, setFont] = useState<FontKey>('cursive')
+  const [colors, setColors] = useState<ThemeColors>(
+    theme === 'minimal' ? MINIMAL_DEFAULTS : PARCHMENT_DEFAULTS
+  )
 
   const editor = useEditor({
     extensions: [
@@ -52,6 +57,10 @@ export function InkEditor({
       toolbar={toolbar}
       ruled={ruled}
       onToggleRuled={() => setRuled((r) => !r)}
+      font={font}
+      onFontChange={setFont}
+      colors={colors}
+      onColorsChange={setColors}
     />
   )
 }

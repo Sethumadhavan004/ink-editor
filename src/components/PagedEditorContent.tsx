@@ -1,8 +1,9 @@
 import { EditorContent } from '@tiptap/react'
 import type { Editor } from '@tiptap/react'
 import { getPageWidthPx, getBodyWidthPx, getBodyHeightPx, PAGE_DIMENSIONS } from '../types'
-import type { PageSize, Theme, ToolbarKey } from '../types'
-import { Toolbar } from './Toolbar'
+import type { PageSize, Theme, ToolbarKey, FontKey, ThemeColors } from '../types'
+import { FloatingToolbar } from './FloatingToolbar'
+import { FONTS } from './FontPicker'
 import '../styles/page.css'
 
 interface Props {
@@ -12,25 +13,62 @@ interface Props {
   toolbar: ToolbarKey[]
   ruled: boolean
   onToggleRuled: () => void
+  font: FontKey
+  onFontChange: (f: FontKey) => void
+  colors: ThemeColors
+  onColorsChange: (c: ThemeColors) => void
 }
 
-export function PagedEditorContent({ editor, pageSize, theme, toolbar, ruled, onToggleRuled }: Props) {
+export function PagedEditorContent({
+  editor,
+  pageSize,
+  theme,
+  toolbar,
+  ruled,
+  onToggleRuled,
+  font,
+  onFontChange,
+  colors,
+  onColorsChange,
+}: Props) {
   const widthPx = getPageWidthPx(pageSize)
   const bodyWidthPx = getBodyWidthPx(pageSize)
   const dims = PAGE_DIMENSIONS[pageSize]
   const pageHeightPx = Math.round(dims.heightMm * 3.7795)
-  const paddingCss = `${dims.paddingTopMm}mm ${dims.paddingRightMm}mm ${dims.paddingBottomMm}mm ${dims.paddingLeftMm}mm`
   const hasToolbar = toolbar.length > 0
   const bodyHeightPx = getBodyHeightPx(pageSize)
 
   return (
-    <div className="ink-page-wrap" data-theme={theme}>
+    <div
+      className="ink-page-wrap"
+      data-theme={theme}
+      style={{
+        '--ink-bg': colors.canvasBg,
+        '--ink-page': colors.paperColor,
+        '--ink-text': colors.textColor,
+        '--ink-border-line': colors.lineColor,
+        '--ink-accent': colors.accentColor,
+        '--ink-font-body': FONTS[font].family,
+      } as React.CSSProperties}
+    >
+      {editor && hasToolbar && (
+        <FloatingToolbar
+          editor={editor}
+          buttons={toolbar}
+          ruled={ruled}
+          onToggleRuled={onToggleRuled}
+          font={font}
+          onFontChange={onFontChange}
+          colors={colors}
+          onColorsChange={onColorsChange}
+        />
+      )}
       <div
         className={`ink-page-card${ruled ? ' ink-ruled' : ''}`}
         style={{
           width: widthPx,
           minHeight: pageHeightPx,
-          padding: paddingCss,
+          padding: `${dims.paddingTopMm}mm ${dims.paddingRightMm}mm ${dims.paddingBottomMm}mm ${dims.paddingLeftMm}mm`,
           ['--ink-padding-top' as string]: `${dims.paddingTopMm}mm`,
           ['--ink-padding-right' as string]: `${dims.paddingRightMm}mm`,
           ['--ink-padding-left' as string]: `${dims.paddingLeftMm}mm`,
@@ -38,14 +76,6 @@ export function PagedEditorContent({ editor, pageSize, theme, toolbar, ruled, on
           ['--ink-body-height' as string]: `${bodyHeightPx}px`,
         }}
       >
-        {editor && hasToolbar && (
-          <Toolbar
-            editor={editor}
-            buttons={toolbar}
-            ruled={ruled}
-            onToggleRuled={onToggleRuled}
-          />
-        )}
         <EditorContent editor={editor} />
       </div>
     </div>
