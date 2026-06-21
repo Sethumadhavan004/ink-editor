@@ -48,7 +48,7 @@ export function FontPicker({ font, onChange, open, onToggle, onClose }: FontPick
         {FONTS[font].label}
       </button>
       {open && (
-        <div className="ink-popover ink-font-picker" role="menu">
+        <div className="ink-popover ink-popover--right ink-font-picker" role="menu">
           {(Object.keys(FONTS) as FontKey[]).map((key) => (
             <button
               key={key}

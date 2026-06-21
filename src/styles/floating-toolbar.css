@@ -75,6 +75,12 @@
   min-width: 160px;
 }
 
+.ink-popover--right {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
 /* Font picker list */
 .ink-font-picker {
   display: flex;

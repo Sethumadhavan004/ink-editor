@@ -57,7 +57,7 @@ export function ColorPanel({ colors, onChange, open, onToggle, onClose }: ColorP
         <Palette size={16} />
       </button>
       {open && (
-        <div className="ink-popover ink-color-panel" role="dialog" aria-label="Color customization">
+        <div className="ink-popover ink-popover--right ink-color-panel" role="dialog" aria-label="Color customization">
           {COLOR_KEYS.map((key) => (
             <div key={key} className="ink-color-row">
               <span className="ink-color-label">{COLOR_LABELS[key]}</span>
