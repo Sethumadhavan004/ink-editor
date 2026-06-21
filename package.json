@@ -1,5 +1,5 @@
 {
-  "name": "ink-editor",
+  "name": "@sethumadhavan/ink-editor",
   "version": "0.0.1",
   "description": "A page-aware rich text editor for React document apps",
   "license": "MIT",
