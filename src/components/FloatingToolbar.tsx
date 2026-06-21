@@ -160,61 +160,59 @@ export function FloatingToolbar({
   const activeGroups = allGroups.filter((g) => buttons.includes(g.key))
 
   return (
-    <div className="ink-floating-toolbar-wrap">
-      <div className="ink-floating-toolbar" role="toolbar" aria-label="Text formatting">
-        {/* Consumer slot: start */}
-        {toolbarStart && toolbarStart.length > 0 && (
-          <>
-            {toolbarStart.map((node, i) => <span key={i} style={{ display: 'contents' }}>{node}</span>)}
-            <Sep />
-          </>
-        )}
+    <div className="ink-floating-toolbar" role="toolbar" aria-label="Text formatting">
+      {/* Consumer slot: start */}
+      {toolbarStart && toolbarStart.length > 0 && (
+        <>
+          {toolbarStart.map((node, i) => <span key={i} style={{ display: 'contents' }}>{node}</span>)}
+          <Sep />
+        </>
+      )}
 
-        {/* Built-in formatting buttons */}
-        {activeGroups.map((group, gi) => (
-          <span key={group.key} className="ink-toolbar-group" style={{ display: 'contents' }}>
-            {group.configs.map((cfg) => (
-              <button
-                key={cfg.label}
-                type="button"
-                className={`ink-toolbar-btn${cfg.isActive() ? ' ink-toolbar-btn--active' : ''}`}
-                onClick={cfg.action}
-                aria-label={cfg.label}
-                title={cfg.label}
-              >
-                {cfg.icon}
-              </button>
-            ))}
-            {gi < activeGroups.length - 1 && <Sep />}
-          </span>
-        ))}
+      {/* Built-in formatting buttons */}
+      {activeGroups.map((group, gi) => (
+        <span key={group.key} className="ink-toolbar-group" style={{ display: 'contents' }}>
+          {group.configs.map((cfg) => (
+            <button
+              key={cfg.label}
+              type="button"
+              className={`ink-toolbar-btn${cfg.isActive() ? ' ink-toolbar-btn--active' : ''}`}
+              onClick={cfg.action}
+              aria-label={cfg.label}
+              title={cfg.label}
+            >
+              {cfg.icon}
+            </button>
+          ))}
+          {gi < activeGroups.length - 1 && <Sep />}
+        </span>
+      ))}
 
-        {/* Font + color pickers */}
-        {activeGroups.length > 0 && <Sep />}
-        <FontPicker
-          font={font}
-          onChange={onFontChange}
-          open={openPanel === 'font'}
-          onToggle={() => togglePanel('font')}
-          onClose={() => setOpenPanel(null)}
-        />
-        <ColorPanel
-          colors={colors}
-          onChange={onColorsChange}
-          open={openPanel === 'color'}
-          onToggle={() => togglePanel('color')}
-          onClose={() => setOpenPanel(null)}
-          hiddenKeys={hiddenColorKeys}
-        />
+      {/* Font + color pickers */}
+      {activeGroups.length > 0 && <Sep />}
+      <FontPicker
+        font={font}
+        onChange={onFontChange}
+        open={openPanel === 'font'}
+        onToggle={() => togglePanel('font')}
+        onClose={() => setOpenPanel(null)}
+      />
+      <ColorPanel
+        colors={colors}
+        onChange={onColorsChange}
+        open={openPanel === 'color'}
+        onToggle={() => togglePanel('color')}
+        onClose={() => setOpenPanel(null)}
+        hiddenKeys={hiddenColorKeys}
+      />
 
-        {/* Consumer slot: end */}
-        {toolbarEnd && toolbarEnd.length > 0 && (
-          <>
-            <Sep />
-            {toolbarEnd.map((node, i) => <span key={i} style={{ display: 'contents' }}>{node}</span>)}
-          </>
-        )}
-      </div>
+      {/* Consumer slot: end */}
+      {toolbarEnd && toolbarEnd.length > 0 && (
+        <>
+          <Sep />
+          {toolbarEnd.map((node, i) => <span key={i} style={{ display: 'contents' }}>{node}</span>)}
+        </>
+      )}
     </div>
   )
 }
