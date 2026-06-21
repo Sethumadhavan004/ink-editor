@@ -53,7 +53,7 @@ export function InkEditor({
       onChange={onChange}
       onColorsChange={onColorsChange}
     >
-      <div className={singlePage ? undefined : 'ink-page-wrap'} data-theme={theme}>
+      <div data-theme={theme}>
         {hasToolbar && (
           <div className="ink-floating-toolbar-wrap">
             <InkToolbar
@@ -64,7 +64,7 @@ export function InkEditor({
             />
           </div>
         )}
-        <InkPage pageSize={pageSize} theme={theme} />
+        <InkPage pageSize={pageSize} theme={theme} bare={singlePage} />
       </div>
     </InkEditorRoot>
   )

@@ -11,9 +11,11 @@ export interface InkPageProps {
   theme?: Theme
   className?: string
   style?: CSSProperties
+  /** Remove the default wrap padding/min-height — use when embedding InkPage in your own layout */
+  bare?: boolean
 }
 
-export function InkPage({ pageSize = 'A4', theme = 'parchment', className, style }: InkPageProps) {
+export function InkPage({ pageSize = 'A4', theme = 'parchment', className, style, bare = false }: InkPageProps) {
   const { editor, ruled, font, colors } = useInkEditor()
 
   const widthPx = getPageWidthPx(pageSize)
@@ -32,7 +34,7 @@ export function InkPage({ pageSize = 'A4', theme = 'parchment', className, style
   } as CSSProperties
 
   return (
-    <div className="ink-page-wrap" data-theme={theme} style={cssVars}>
+    <div className={bare ? 'ink-page-wrap ink-page-wrap--single' : 'ink-page-wrap'} data-theme={theme} style={cssVars}>
       <div
         className={`ink-page-card${ruled ? ' ink-ruled' : ''}${className ? ` ${className}` : ''}`}
         style={{
